@@ -13,7 +13,7 @@ const register = async (req, res ) =>{
             [email]
         );
         if (userExists.rows.length > 0){
-            return res.status(400).json ({error: ' Email already registered'});
+            return res.status(400).json ({error: 'Email already registered'});
         }
         const salt = await bcrypt.genSalt(10);
         const password_hash = await bcrypt.hash(password, salt);

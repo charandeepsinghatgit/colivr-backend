@@ -1,6 +1,8 @@
 const express = require('express');
 const dotenv = require('dotenv');
 
+const protect = require("./middleware/auth");
+
 dotenv.config();
 
 const pool = require('./db');
@@ -21,11 +23,12 @@ const authRoutes = require('./routes/auth');
 
 app.use('/api/auth', authRoutes);
 
-app.get('/', (req, res) => {
-    res.json({ message : 'Colivr API is running'});
-});
-
 const PORT = process.env.PORT || 3000;
+
+
+app.get('/api/protected', protect, (req, res)=>{
+    res.json({message:`Hello ${req.user.email}, You are authorized!`})
+});
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
