@@ -55,7 +55,7 @@ const getOneListing = async (req, res) =>{
         if(listing.rows.length === 0){
             return res.status(404).json({error:'listing not found'});
         }
-        res.status(200).json({listings: listing.rows[0]});
+        res.status(200).json({listing: listing.rows[0]});
     }catch(error){
         console.error(error)
         res.status(500).json({error:'Server error'})
@@ -76,10 +76,10 @@ const updateListing = async (req, res) => {
             return res.status(403).json({error:'Unauthorized'});
         }
         const updated = await pool.query(
-            'UPDATE listings SET title = $1, listing_type= $2, description = $3, location = $4, price = $5, is_active = $6 WHERE id = $7 RETURNING *',
+            'UPDATE listings SET title = COALESCE($1, title), listing_type = COALESCE($2, listing_type), description = COALESCE($3, description), location = COALESCE($4, location), price = COALESCE($5, price), is_active = COALESCE($6, is_active) WHERE id = $7 RETURNING *',
             [title, listing_type, description, location, price, is_active, id]
         );
-        res.status(200).json({listing:updated.rows[0]});
+        res.status(200).json({message:"updated" , listing:updated.rows[0]});
     }catch(error){
         console.error(error)
         res.status(500).json({error:'Server error'})
