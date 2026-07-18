@@ -26,11 +26,16 @@ const listingRoutes = require('./routes/listings');
 
 app.use('/api/listings', listingRoutes);
 
+const userRoutes = require('./routes/users');
+
+app.use('/api/users', userRoutes);
+
 const PORT = process.env.PORT || 3000;
 
 app.get('/', (req,res) =>{
     res.json({message:'Colivr API is running!'});
 });
+
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
